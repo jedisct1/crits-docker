@@ -4,7 +4,7 @@ set -e
 
 sv start tokumx
 
-chown -R crits:crits /opt/crits
+chown -R crits:crits /opt/crits /opt/crits_services
 cd /opt/crits
 
 if [ ! -s /data/tokumx/crits-ok ]; then
