@@ -16,10 +16,11 @@ based on the REMnux image, with the following changes:
 ```bash
 $ docker build -t crits .
 
+# echo never > /sys/kernel/mm/transparent_hugepage/enabled
+(and make it permanent)
+
 $ docker run --name crits -it \
-  -v ~/crits-data/db:/data/db \
-  -v ~/crits-data/ssl:/data/ssl \
-  -p 8443:8443 -p 27017:27017 crits
+  -v ~/crits-data:/data -p 8443:8443 crits
 ```
 
 Connect to `https://<external IP>:8443`, create sources, add users,
