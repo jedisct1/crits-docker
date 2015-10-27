@@ -4,7 +4,6 @@ set -e
 
 sv start tokumx
 
-chown -R crits:crits /opt/crits /opt/crits_services
 cd /opt/crits
 
 if [ ! -s /data/tokumx/crits-ok ]; then
@@ -19,4 +18,5 @@ if [ ! -s /data/tokumx/crits-ok ]; then
   date > /data/tokumx/crits-ok
 fi
 
-exec python manage.py runserver
+chown -R crits:crits /opt/crits/logs
+exec setuser crits python manage.py runserver 0.0.0.0:8080

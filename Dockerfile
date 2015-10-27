@@ -8,12 +8,10 @@ RUN apt-get -y install software-properties-common
 RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10 && \
   apt-add-repository -y universe && \
   apt-get -qq update && apt-get install -y --fix-missing \
-  apache2 \
   build-essential \
   curl \
   git \
   jed \
-  libapache2-mod-wsgi \
   libevent-dev \
   libfuzzy-dev \
   libimage-exiftool-perl \
@@ -87,33 +85,6 @@ ADD tokumx-check.sh /etc/service/tokumx/check
 
 ENV PATH /opt/tokumx/bin:$PATH
 
-RUN \
-  /etc/init.d/apache2 stop && \
-  rm -rf /etc/apache2/sites-available/* && \
-  cp /opt/crits/extras/*.conf /etc/apache2 && \
-  cp -r /opt/crits/extras/sites-available /etc/apache2 && \
-  rm /etc/apache2/sites-enabled/* && \
-  ln -f -s /etc/apache2/sites-available/default-ssl /etc/apache2/sites-enabled/default-ssl && \
-  mkdir -pv /etc/apache2/conf.d/i && \
-  usermod -a -G crits www-data && \
-  a2enmod ssl
-
-RUN \
-  export "LANG=en_US.UTF-8" && \
-  sed -i "/export\ LANG\=C/ s/C/en\_US\.UTF\-8/" /etc/apache2/envvars && \
-  sed -i '$ i\\n0 * * * *       root    cd /opt/crits/ && /usr/bin/python manage.py mapreduces\n0 * * * *       root    cd /opt/crits/ && /usr/bin/python manage.py generate_notifications' /etc/crontab && \
-  sed -i 's/^CustomLog\ .*/CustomLog\ \/dev\/null\ combined/' /etc/apache2/apache2.conf && \
-  sed -i 's/^CustomLog\ .*/CustomLog\ \/dev\/null\ combined/' /etc/apache2/sites-available/default-ssl && \
-  sed -i 's/^ErrorLog\ .*/ErrorLog\ \/dev\/null/' /etc/apache2/apache2.conf && \
-  sed -i 's/www\-data/crits/' /etc/apache2/envvars && \
-  sed -i 's/\ 443/\ 8443/' /etc/apache2/ports.conf && \
-  sed -i 's/443/8443/' /etc/apache2/sites-available/default-ssl && \
-  sed -i 's/\/data\//\/opt\//' /etc/apache2/sites-available/default-ssl && \
-  sed -i 's/\/data\//\/opt\//' /etc/apache2/httpd.conf
-
-RUN mkdir -p /etc/services/apache
-ADD apache.sh /etc/service/apache/run
-
 RUN mkdir -p /etc/services/crits
 ADD crits.sh /etc/service/crits/run
 
@@ -122,6 +93,6 @@ ENV HOME /opt/crits
 RUN mkdir -p /data
 VOLUME ["/data"]
 
-EXPOSE 8443
+EXPOSE 8080
 
 ENTRYPOINT ["/sbin/my_init"]
