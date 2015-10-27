@@ -19,4 +19,4 @@ if [ ! -s /data/tokumx/crits-ok ]; then
 fi
 
 chown -R crits:crits /opt/crits/logs
-exec setuser crits python manage.py runserver 0.0.0.0:8080
+exec setuser crits python manage.py runserver -v0 0.0.0.0:8080
