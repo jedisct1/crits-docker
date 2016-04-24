@@ -1,5 +1,5 @@
 
-FROM jedisct1/phusion-baseimage-latest:15.10
+FROM jedisct1/phusion-baseimage-latest:16.04
 MAINTAINER Frank Denis (@jedisct1)
 
 USER root
