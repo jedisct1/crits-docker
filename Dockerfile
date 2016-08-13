@@ -79,13 +79,13 @@ RUN cd /tmp && \
   groupadd -r tokumx && \
   useradd -r -g tokumx -d /opt/tokumx -s /sbin/nologin -c "TokuMX" tokumx
 
-RUN mkdir -p /etc/services/tokumx
+RUN mkdir -p /etc/service/tokumx
 ADD tokumx.sh /etc/service/tokumx/run
 ADD tokumx-check.sh /etc/service/tokumx/check
 
 ENV PATH /opt/tokumx/bin:$PATH
 
-RUN mkdir -p /etc/services/crits
+RUN mkdir -p /etc/service/crits
 ADD crits.sh /etc/service/crits/run
 
 ENV HOME /opt/crits
